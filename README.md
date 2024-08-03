@@ -1,0 +1,1 @@
+This thing allows you to turn an image into bezier curves and then put them into desmos

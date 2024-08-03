@@ -1,12 +1,13 @@
 import cv2
 import potrace
-
+from flask import Flask
+from flask import render_template
 
 def detect(file):
     #make it black and white and then trace it so potrace can get the lines
     image = cv2.imread(file)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    edges = cv2.Canny(gray, 100, 200)
+    edges = cv2.Canny(gray, 30, 200)
     return edges
 
 def makeCorner(x0, x1, x2, y0, y1, y2):
@@ -50,6 +51,18 @@ def trace(file):
     
 b = trace('rick.jpg')
 
-with open('output.txt', 'w') as f:
+
+
+with open('static/output.js', 'w') as f:
+    f.write('const funcs = [')
     for i in b:
-        f.write(i + '\n')
+        f.write('\'' + i + '\'' + ', ')
+    f.write('\'\'];')
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return render_template('desmos.html');
+
+app.run()
