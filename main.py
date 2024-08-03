@@ -56,7 +56,7 @@ b = trace('rick.jpg')
 with open('static/output.js', 'w') as f:
     f.write('const funcs = [')
     for i in b:
-        f.write('\'' + i + '\'' + ', ')
+        f.write('\'' + i.replace('\\', '\\\\') + '\'' + ', ')
     f.write('\'\'];')
 
 app = Flask(__name__)
