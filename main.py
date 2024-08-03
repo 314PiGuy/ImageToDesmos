@@ -15,6 +15,10 @@ def makeCorner(x0, x1, x2, y0, y1, y2):
     expr2 = rf'\left(\left(1-t\right){x1}+t{x2},\left(1-t\right){y1}+t{y2}\right)'
     return expr1, expr2
 
+def makeCurve(x0, x1, x2, x3, y0, y1, y2, y3):
+    #fourth order bezier in desmos format
+    expr = rf'\left(\left(1-t\right)\left(\left(1-t\right)\left(\left(1-t\right){x0}+t{x1}\right)+t\left(\left(1-t\right){x1}+t{x2}\right)\right)+t\left(\left(1-t\right)\left(\left(1-t\right){x1}+t{x2}\right)+t\left(\left(1-t\right){x2}+t{x3}\right)\right),\left(1-t\right)\left(\left(1-t\right)\left(\left(1-t\right){y0}+t{y1}\right)+t\left(\left(1-t\right){y1}+t{y2}\right)\right)+t\left(\left(1-t\right)\left(\left(1-t\right){y1}+t{y2}\right)+t\left(\left(1-t\right){y2}+t{y3}\right)\right)\right)'
+    return expr
 
 def trace(file):
     bmp = potrace.Bitmap(detect(file))
@@ -27,22 +31,25 @@ def trace(file):
         start = curve.start_point
         segments = curve.segments
         for segment in segments:
-            #this thing doesnt work for some reason its non unpackable even though according to the docs is shouldnt be
-            x0, y0 = start, start
+            x0, y0 = start.x, start.y
             if segment.is_corner:
-                x1, y1 = segment.c
-                x2, y2 = segment.end_point
+                x1, y1 = segment.c.x, segment.c.y
+                x2, y2 = segment.end_point.x, segment.end_point.y
                 s1, s2 = makeCorner(x0, x1, x2, y0, y1, y2)
                 beziers.append(s1)
                 beziers.append(s2)
             else:
-                x1, y1 = segment.c1
-                x2, y2 = segment.c2
-                x3, y3 = segment.end_point
-                #need to figure out how to make a desmos format fourth order bezier curve which will probably be long and painful
+                x1, y1 = segment.c1.x, segment.c1.y
+                x2, y2 = segment.c2.x, segment.c2.y
+                x3, y3 = segment.end_point.x, segment.end_point.y
+                s = makeCurve(x0, x1, x2, x3, y0, y1, y2, y3)
                 beziers.append(s)
             start = segment.end_point
             
     return beziers
     
 b = trace('rick.jpg')
+
+with open('output.txt', 'w') as f:
+    for i in b:
+        f.write(i + '\n')

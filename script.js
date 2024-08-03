@@ -1,11 +1,10 @@
 function graph(content){
-    var n = 0;
     content.forEach(function (expr){
         console.log(expr);
-        calculator.setExpression({ id: n, latex: expr, color: '#ff0000' });
+        calculator.setExpression({latex: expr, color: '#ff0000' });
     })
-    n++;
 }
+
 
 document.getElementById('file')
             .addEventListener('change', (event) => {
