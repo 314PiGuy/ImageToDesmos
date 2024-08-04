@@ -7,7 +7,7 @@ def detect(file):
     #make it black and white and then trace it so potrace can get the lines
     image = cv2.imread(file)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    edges = cv2.Canny(gray, 30, 200)
+    edges = cv2.Canny(gray, 30, 200) #the last 2 parameters can be tweaked a bit
     return edges
 
 def makeCorner(x0, x1, x2, y0, y1, y2):
@@ -23,7 +23,7 @@ def makeCurve(x0, x1, x2, x3, y0, y1, y2, y3):
 
 def trace(file):
     bmp = potrace.Bitmap(detect(file))
-    path = bmp.trace(2, potrace.POTRACE_TURNPOLICY_MINORITY, 1.0, 1, .5)
+    path = bmp.trace(2, potrace.POTRACE_TURNPOLICY_MINORITY, 1.0, 1, .5) #these can also be messed with to get different levels of details
 
     beziers = []
 
@@ -49,7 +49,8 @@ def trace(file):
             
     return beziers
     
-b = trace('rick.jpg')
+    
+b = trace('rick.jpg') #change this to the path of the desired image
 
 
 
