@@ -1,0 +1,4 @@
+Flask>=2.2
+numpy>=1.23
+opencv-python>=4.7
+pypotrace>=0.3
